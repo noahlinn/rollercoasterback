@@ -1,4 +1,5 @@
 from flask import request, Flask
+from flask_sqlalchemy.model import Model
 import models
 
 def create_coaster():
@@ -16,4 +17,10 @@ def create_coaster():
     )
     models.db.session.add(coaster)
     models.db.session.commit()
-    return "OK"
+    return {"new_coaster": coaster.to_json()}
+
+def search_coasters_by_name():
+    name = request.json["name"]
+    print(name)
+    coaster = models.Roller_Coaster.query.filter(models.Roller_Coaster.name.contains(name)).all()
+    return {"results": [c.to_json() for c in coaster]}

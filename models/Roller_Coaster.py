@@ -13,3 +13,16 @@ class Roller_Coaster(db.Model):
     manufacturer = db.Column(db.String)
     video = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    def to_json(self):
+        return {
+        "id": self.id,
+        "name": self.name,
+        "location": self.location,
+        "type_of": self.type_of,
+        "length_in_feet": self.length_in_feet,
+        "height_in_feet": self.height_in_feet,
+        "length_in_feet": self.length_in_feet,
+        "number_of_inversions": self.number_of_inversions,
+        "manufacturer": self.manufacturer,
+        "video": self.video,
+        }
