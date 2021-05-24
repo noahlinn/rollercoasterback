@@ -40,4 +40,3 @@ def verify():
     if not user:
         return{"message": "user not found"},404
     return{"user": user.to_json()}
-    
