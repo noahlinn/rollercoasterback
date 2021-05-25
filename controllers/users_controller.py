@@ -1,4 +1,5 @@
 from flask import request, Flask
+from sqlalchemy.orm import query
 import models
 import jwt
 from flask_bcrypt import Bcrypt
@@ -40,3 +41,54 @@ def verify():
     if not user:
         return{"message": "user not found"},404
     return{"user": user.to_json()}
+
+def one_user(id):
+    user = models.User.query.filter_by(id = id).first()
+    if not user:
+        return{"message": "user not found"},404
+    return{"user": user.to_json()}
+
+def credits(id):
+    if request.method == "PUT":
+        decrypted_id = jwt.decode(request.headers["Authorization"], os.environ.get('JWT_SECRET'), algorithms=["HS256"])["user_id"]
+        user = models.User.query.filter_by(id=decrypted_id).first()
+        if not user:
+            return{"message": "User Not Found"}, 404
+        coaster = models.Roller_Coaster.query.filter_by(id = id).first()
+        if not coaster:
+            return{"message": "No Roller Coaster"}, 404
+        user.credits.append(coaster)
+        models.db.session.add_all([user, coaster])
+        models.db.session.commit()
+        return{"Message": "Associated"}
+    elif request.method == "GET":
+        user = models.User.query.filter_by(id = id).first()
+        if not user:
+            return{"message": "User Not Found"}, 404
+        coasters = user.credits
+        if not coasters:
+            return{"message": "No Coasters Found"}, 404
+        return {"credits" : [c.to_json() for c in coasters]}
+
+
+def add_to_bucketlist(id):
+    if request.method == "PUT":
+        decrypted_id = jwt.decode(request.headers["Authorization"], os.environ.get('JWT_SECRET'), algorithms=["HS256"])["user_id"]
+        user = models.User.query.filter_by(id=decrypted_id).first()
+        if not user:
+            return{"message": "User Not Found"}, 404
+        coaster = models.Roller_Coaster.query.filter_by(id = id).first()
+        if not coaster:
+            return{"message": "No Roller Coaster"}, 404
+        user.bucketlists.append(coaster)
+        models.db.session.add_all([user, coaster])
+        models.db.session.commit()
+        return {"message": "Added to bucket list"}
+    elif request.method == "GET":
+        user = models.User.query.filter_by(id = id).first()
+        if not user:
+            return{"message": "User Not Found"}, 404
+        coasters = user.bucketlists
+        if not coasters:
+            return{"message": "No Coasters Found"}, 404
+        return {"bucket_list" : [c.to_json() for c in coasters]}

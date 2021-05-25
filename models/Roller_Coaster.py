@@ -16,12 +16,14 @@ class Roller_Coaster(db.Model):
     image = db.Column(db.String)
     video = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # bucketlists = db.relationship('User', secondary="bucket_list_coasters", backref="roller_coasters")
     def to_json(self):
         return {
         "id": self.id,
         "name": self.name,
         "location": self.location,
         "park_located_at": self.park_located_at,
+        "year_built": self.year_built,
         "type_of": self.type_of,
         "top_speed_in_mph": self.top_speed_in_mph,
         "length_in_feet": self.length_in_feet,

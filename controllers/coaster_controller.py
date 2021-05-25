@@ -25,7 +25,6 @@ def create_coaster():
 
 def search_coasters_by_name():
     query = request.json["query"]
-    print(query)
     coaster = models.Roller_Coaster.query.filter(models.Roller_Coaster.name.ilike(f'%{query}%')).all()
     if not coaster:
         return{"message": "No Roller Coasters Found"}, 404
