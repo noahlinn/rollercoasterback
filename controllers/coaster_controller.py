@@ -3,6 +3,7 @@ from flask_sqlalchemy.model import Model
 import models
 
 def create_coaster():
+    print(request.json)
     coaster = models.Roller_Coaster(
         name = request.json["name"],
         park_located_at = request.json["park_located_at"],
@@ -183,5 +184,26 @@ def seeding():
 
 def get_one_coaster(id):
     coaster = models.Roller_Coaster.query.filter_by(id = id).first()
-    return{"roller_coaster": coaster.to_json()}
+    if not coaster:
+        return{"message": "No Roller Coaster"}, 404
+    if request.method == "GET":
+        return{"roller_coaster": coaster.to_json()}
+    elif request.method == "PUT":
+        coaster.name = request.json["name"],
+        coaster.park_located_at = request.json["park_located_at"],
+        coaster.location = request.json["location"],
+        coaster.year_built = request.json["year_built"],
+        coaster.type_of = request.json["type_of"],
+        coaster.top_speed_in_mph = request.json["top_speed_in_mph"],
+        coaster.length_in_feet = request.json["length_in_feet"],
+        coaster.height_in_feet = request.json["height_in_feet"],
+        coaster.number_of_inversions = request.json["number_of_inversions"],
+        coaster.manufacturer = request.json["manufacturer"],
+        coaster.image = request.json["image"],
+        coaster.video = request.json["video"]
+        models.db.session.add(coaster)
+        models.db.session.commit()
+        return{"roller_coaster": coaster.to_json()}
+    
+
     
