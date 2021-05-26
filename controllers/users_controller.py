@@ -1,5 +1,5 @@
 import re
-from flask import request, Flask
+from flask import request, Flask, jsonify
 from sqlalchemy.orm import query
 import models
 import jwt
@@ -9,10 +9,13 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 def create_user():
+    # print(request.files["file"])
     existing_user = models.User.query.filter_by(email = request.json["email"]).first()
     if existing_user:
         return{"message": "Email must be unique"}, 400
     hashed_pw = bcrypt.generate_password_hash(request.json["password"]).decode('utf-8')
+    # file_to_upload = request.files["file"]
+    # print(file_to_upload)
     user = models.User(
         name = request.json["name"],
         email = request.json["email"],
@@ -23,7 +26,6 @@ def create_user():
     models.db.session.add(user)
     models.db.session.commit()
     encrypted_id = jwt.encode({ "user_id": user.id }, os.environ.get('JWT_SECRET'), algorithm="HS256")
-
     return{"user": user.to_json(), "user_id": encrypted_id}
 
 def login():
