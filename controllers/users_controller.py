@@ -5,23 +5,30 @@ import models
 import jwt
 from flask_bcrypt import Bcrypt
 import os
+import cloudinary as cloudinary, cloudinary.uploader
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
+cloudinary.config(cloud_name = os.environ.get('CLOUD_NAME'), api_key=os.environ.get('API_KEY'), 
+    api_secret=os.environ.get('API_SECRET'))
+
 def create_user():
-    # print(request.files["file"])
-    existing_user = models.User.query.filter_by(email = request.json["email"]).first()
+    file_to_upload = request.files["file"]
+    
+    upload_result = cloudinary.uploader.upload(file_to_upload)
+
+    existing_user = models.User.query.filter_by(email = request.form["email"]).first()
     if existing_user:
         return{"message": "Email must be unique"}, 400
-    hashed_pw = bcrypt.generate_password_hash(request.json["password"]).decode('utf-8')
-    # file_to_upload = request.files["file"]
-    # print(file_to_upload)
+    hashed_pw = bcrypt.generate_password_hash(request.form["password"]).decode('utf-8')
+
     user = models.User(
-        name = request.json["name"],
-        email = request.json["email"],
-        location = request.json["location"],
-        about_me = request.json["about_me"],
-        password = hashed_pw
+        name = request.form["name"],
+        email = request.form["email"],
+        location = request.form["location"],
+        about_me = request.form["about_me"],
+        password = hashed_pw,
+        profile_pic = upload_result["url"]
     )
     models.db.session.add(user)
     models.db.session.commit()

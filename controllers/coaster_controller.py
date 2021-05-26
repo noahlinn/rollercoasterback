@@ -178,13 +178,7 @@ def seeding():
         image = "https://www.coaster101.com/wp-content/uploads/2018/05/IMG_2987.jpg",
         video = "Baa-x29rT30"
     )
-    # coaster_list = []
-    # for n in range (1, 10+1):
-    #     string_n = str(n)
-    #     coaster = f'coaster{string_n}'
-    #     coaster_list.append(coaster)
-    # print(coaster_list)
-    models.db.session.add_all([coaster7, coaster6, coaster5, coaster4, coaster3, coaster2, coaster1])
+    models.db.session.add_all([coaster10, coaster9, coaster8, coaster7, coaster6, coaster5, coaster4, coaster3, coaster2, coaster1])
     models.db.session.commit()
     return "seeded"
 

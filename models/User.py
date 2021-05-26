@@ -23,5 +23,5 @@ class User(db.Model):
         "city": self.location,
         "about_me": self.about_me,
         "email": self.email,
-        "profile_pic": self.profile_pic 
+        "image": self.profile_pic 
         }
