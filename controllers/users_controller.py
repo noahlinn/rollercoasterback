@@ -106,3 +106,10 @@ def search_by_name():
     if not user:
         return{"message": "No Users Found"}, 404
     return {"results": [u.to_json() for u in user]}
+
+def search_by_location():
+    query = request.json["query"]
+    user = models.User.query.filter(models.User.location.ilike(f'%{query}%')).all()
+    if not user:
+        return{"message": "No Users Found"}, 404
+    return {"results": [u.to_json() for u in user]}
