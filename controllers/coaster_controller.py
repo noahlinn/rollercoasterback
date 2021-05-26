@@ -30,6 +30,13 @@ def search_coasters_by_name():
         return{"message": "No Roller Coasters Found"}, 404
     return {"results": [c.to_json() for c in coaster]}
 
+def search_coasters_by_park():
+    query = request.json["query"]
+    coaster = models.Roller_Coaster.query.filter(models.Roller_Coaster.park_located_at.ilike(f'%{query}%')).all()
+    if not coaster:
+        return{"message": "No Roller Coasters Found"}, 404
+    return {"results": [c.to_json() for c in coaster]}
+
 def seeding():
     coaster1 = models.Roller_Coaster(
         name = "Batman The Ride",

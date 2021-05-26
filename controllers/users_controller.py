@@ -99,3 +99,10 @@ def add_to_bucketlist(id):
         if not coasters:
             return{"message": "No Coasters Found"}, 404
         return {"bucket_list" : [c.to_json() for c in coasters]}
+
+def search_by_name():
+    query = request.json["query"]
+    user = models.User.query.filter(models.User.name.ilike(f'%{query}%')).all()
+    if not user:
+        return{"message": "No Users Found"}, 404
+    return {"results": [u.to_json() for u in user]}

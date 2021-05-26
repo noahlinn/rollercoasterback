@@ -7,3 +7,4 @@ def apply_users_routes(app):
     app.route('/users/<int:id>', methods=["GET"])(users_controller.one_user)
     app.route('/users/credits/<int:id>', methods=["PUT", "GET", "DELETE"])(users_controller.credits)
     app.route('/users/bucketlist/<int:id>', methods=["PUT", "GET", "DELETE"])(users_controller.add_to_bucketlist)
+    app.route('/users/search/name', methods=["POST"])(users_controller.search_by_name)
