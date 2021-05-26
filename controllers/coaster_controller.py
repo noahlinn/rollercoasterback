@@ -1,23 +1,30 @@
 from flask import request, Flask
 from flask_sqlalchemy.model import Model
 import models
+import cloudinary as cloudinary, cloudinary.uploader
+import os
+import jwt
 
+cloudinary.config(cloud_name = os.environ.get('CLOUD_NAME'), api_key=os.environ.get('API_KEY'), 
+    api_secret=os.environ.get('API_SECRET'))
 def create_coaster():
-    print(request.json)
+    decrypted_id = jwt.decode(request.headers["Authorization"], os.environ.get('JWT_SECRET'), algorithms=["HS256"])["user_id"]
+    file_to_upload = request.files["file"]
+    upload_result = cloudinary.uploader.upload(file_to_upload)
     coaster = models.Roller_Coaster(
-        name = request.json["name"],
-        park_located_at = request.json["park_located_at"],
-        location = request.json["location"],
-        year_built = request.json["year_built"],
-        type_of = request.json["type_of"],
-        top_speed_in_mph = request.json["top_speed_in_mph"],
-        length_in_feet = request.json["length_in_feet"],
-        height_in_feet = request.json["height_in_feet"],
-        number_of_inversions = request.json["number_of_inversions"],
-        manufacturer = request.json["manufacturer"],
-        image = request.json["image"],
-        video = request.json["video"],
-        user_id = request.headers["Authorization"]
+        name = request.form["name"],
+        park_located_at = request.form["park_located_at"],
+        location = request.form["location"],
+        year_built = request.form["year_built"],
+        type_of = request.form["type_of"],
+        top_speed_in_mph = request.form["top_speed_in_mph"],
+        length_in_feet = request.form["length_in_feet"],
+        height_in_feet = request.form["height_in_feet"],
+        number_of_inversions = request.form["number_of_inversions"],
+        manufacturer = request.form["manufacturer"],
+        image = upload_result["url"],
+        video = request.form["video"],
+        user_id = decrypted_id
     )
     models.db.session.add(coaster)
     models.db.session.commit()
