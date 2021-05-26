@@ -19,5 +19,5 @@ app.route('/', methods=["GET"])(root)
 apply_routes(app)
 
 if __name__ == '__main__':
-  port = int(os.environ.get('PORT')) or 5000
+  port = os.environ.get('PORT') or 5000
   app.run(port=port, debug=True)
