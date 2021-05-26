@@ -10,7 +10,7 @@ bcrypt = Bcrypt(app)
 def create_user():
     existing_user = models.User.query.filter_by(email = request.json["email"]).first()
     if existing_user:
-        return{"message": "Email must be presenet and unique"}, 400
+        return{"message": "Email must be present and unique"}, 400
     hashed_pw = bcrypt.generate_password_hash(request.json["password"]).decode('utf-8')
     user = models.User(
         name = request.json["name"],
@@ -19,6 +19,7 @@ def create_user():
         about_me = request.json["about_me"],
         password = hashed_pw
     )
+    
     models.db.session.add(user)
     models.db.session.commit()
     encrypted_id = jwt.encode({ "user_id": user.id }, os.environ.get('JWT_SECRET'), algorithm="HS256")
