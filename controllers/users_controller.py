@@ -1,3 +1,4 @@
+import re
 from flask import request, Flask
 from sqlalchemy.orm import query
 import models
@@ -10,7 +11,7 @@ bcrypt = Bcrypt(app)
 def create_user():
     existing_user = models.User.query.filter_by(email = request.json["email"]).first()
     if existing_user:
-        return{"message": "Email must be present and unique"}, 400
+        return{"message": "Email must be unique"}, 400
     hashed_pw = bcrypt.generate_password_hash(request.json["password"]).decode('utf-8')
     user = models.User(
         name = request.json["name"],
@@ -19,7 +20,6 @@ def create_user():
         about_me = request.json["about_me"],
         password = hashed_pw
     )
-    
     models.db.session.add(user)
     models.db.session.commit()
     encrypted_id = jwt.encode({ "user_id": user.id }, os.environ.get('JWT_SECRET'), algorithm="HS256")
@@ -50,7 +50,7 @@ def one_user(id):
     return{"user": user.to_json()}
 
 def credits(id):
-    if request.method == "PUT":
+    if request.method == "PUT" or request.method == "DELETE":
         decrypted_id = jwt.decode(request.headers["Authorization"], os.environ.get('JWT_SECRET'), algorithms=["HS256"])["user_id"]
         user = models.User.query.filter_by(id=decrypted_id).first()
         if not user:
@@ -58,10 +58,13 @@ def credits(id):
         coaster = models.Roller_Coaster.query.filter_by(id = id).first()
         if not coaster:
             return{"message": "No Roller Coaster"}, 404
-        user.credits.append(coaster)
+        if request.method == "PUT":
+            user.credits.append(coaster)
+        elif request.method == "DELETE":
+            user.credits.remove(coaster)
         models.db.session.add_all([user, coaster])
         models.db.session.commit()
-        return{"Message": "Associated"}
+        return{"Message": "Associated or Dissociated"}
     elif request.method == "GET":
         user = models.User.query.filter_by(id = id).first()
         if not user:
