@@ -76,7 +76,7 @@ def credits(id):
 
 
 def add_to_bucketlist(id):
-    if request.method == "PUT":
+    if request.method == "PUT" or request.method == "DELETE":
         decrypted_id = jwt.decode(request.headers["Authorization"], os.environ.get('JWT_SECRET'), algorithms=["HS256"])["user_id"]
         user = models.User.query.filter_by(id=decrypted_id).first()
         if not user:
@@ -84,10 +84,13 @@ def add_to_bucketlist(id):
         coaster = models.Roller_Coaster.query.filter_by(id = id).first()
         if not coaster:
             return{"message": "No Roller Coaster"}, 404
-        user.bucketlists.append(coaster)
+        if request.method == "PUT":
+            user.bucketlists.append(coaster)
+        elif request.method == "DELETE":
+            user.bucketlists.remove(coaster)
         models.db.session.add_all([user, coaster])
         models.db.session.commit()
-        return {"message": "Added to bucket list"}
+        return {"message": "Added or Removed from bucket list"}
     elif request.method == "GET":
         user = models.User.query.filter_by(id = id).first()
         if not user:
