@@ -13,7 +13,9 @@ cloudinary.config(cloud_name = os.environ.get('CLOUD_NAME'), api_key=os.environ.
     api_secret=os.environ.get('API_SECRET'))
 
 def create_user():
-    if not request.json:
+    if not request.form:
+        return {"message": "Please Fill Out Full Form"}, 400
+    if not request.files:
         return {"message": "Please Fill Out Full Form"}, 400
     file_to_upload = request.files["file"]
     
