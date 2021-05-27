@@ -211,6 +211,10 @@ def get_one_coaster(id):
         models.db.session.add(coaster)
         models.db.session.commit()
         return{"roller_coaster": coaster.to_json()}
+    elif request.method == "DELETE":
+        models.db.session.delete(coaster)
+        models.db.session.commit()
+        return{"Message": "Deleted"}
     
 
     
