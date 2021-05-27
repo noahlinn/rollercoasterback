@@ -13,6 +13,8 @@ cloudinary.config(cloud_name = os.environ.get('CLOUD_NAME'), api_key=os.environ.
     api_secret=os.environ.get('API_SECRET'))
 
 def create_user():
+    if not request.json:
+        return {"message": "Please Fill Out Full Form"}, 400
     file_to_upload = request.files["file"]
     
     upload_result = cloudinary.uploader.upload(file_to_upload)
@@ -36,8 +38,10 @@ def create_user():
     return{"user": user.to_json(), "user_id": encrypted_id}
 
 def login():
+    if not request.json:
+        return {"message": "Must Submit Email and Password"}, 400
     user = models.User.query.filter_by(email=request.json["email"]).first()
-    if not user:
+    if not user:   
         return{"message": "User not found"}, 404
     if bcrypt.check_password_hash(user.password, request.json["password"]):
         encrypted_id = jwt.encode({"user_id": user.id}, os.environ.get('JWT_SECRET'), algorithm = "HS256")
