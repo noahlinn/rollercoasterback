@@ -116,7 +116,7 @@ def seeding():
         height_in_feet = 101,
         number_of_inversions = 2,
         manufacturer = "Bolliger & Mabillard",
-        image = "https://1.bp.blogspot.com/-BvQJFXWUbMQ/XvlB_V3L6VI/AAAAAAAA5qk/Xlo-FBjAu3Y9NHJ0KxfK4bhFznkDg6UmgCLcBGAsYHQ/s1600/2.JPG",
+        image = "https://res.cloudinary.com/drrh2ss0o/image/upload/v1622144793/goliath_ubmrrr.jpg",
         video = "1Bwu0C2Qbxg"
     )
     coaster6 = models.Roller_Coaster(
@@ -189,7 +189,21 @@ def seeding():
         image = "https://www.coaster101.com/wp-content/uploads/2018/05/IMG_2987.jpg",
         video = "Baa-x29rT30"
     )
-    models.db.session.add_all([coaster10, coaster9, coaster8, coaster7, coaster6, coaster5, coaster4, coaster3, coaster2, coaster1])
+    coaster11 = models.Roller_Coaster(
+        name = "Mindbender",
+        park_located_at = "Six Flags Over Georgia",
+        location = "Austell, Georgia, United States",
+        year_built = 1978,
+        type_of = "Steel Looping",
+        top_speed_in_mph = 50,
+        length_in_feet = 3253,
+        height_in_feet = 80,
+        number_of_inversions = 2,
+        manufacturer = "Schwarzkopf",
+        image = "https://www.coaster101.com/wp-content/uploads/2018/05/IMG_2987.jpg",
+        video = "Baa-x29rT30"
+    )
+    models.db.session.add_all([coaster11, coaster10, coaster9, coaster8, coaster7, coaster6, coaster5, coaster4, coaster3, coaster2, coaster1])
     models.db.session.commit()
     return "seeded"
 
