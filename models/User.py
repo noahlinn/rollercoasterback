@@ -14,6 +14,7 @@ class User(db.Model):
     profile_pic = db.Column(db.String)
     credits = db.relationship('Roller_Coaster', secondary="ridden_coasters", backref="users")
     bucketlists = db.relationship('Roller_Coaster', secondary="bucket_list_coasters")
+    coasters = db.relationship('Roller_Coaster')
 
 
     def to_json(self):

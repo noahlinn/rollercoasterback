@@ -128,3 +128,8 @@ def search_by_location():
     if not user:
         return{"message": "No Users Found"}, 404
     return {"results": [u.to_json() for u in user]}
+
+def get_users_created_coasters(id):
+    user = models.User.query.filter_by(id = id).first()
+    coasters = user.coasters
+    return{"results": [c.to_json() for c in coasters]}
