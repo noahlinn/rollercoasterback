@@ -200,7 +200,7 @@ def seeding():
         height_in_feet = 80,
         number_of_inversions = 2,
         manufacturer = "Schwarzkopf",
-        image = "https://www.coaster101.com/wp-content/uploads/2018/05/IMG_2987.jpg",
+        image = "https://res.cloudinary.com/drrh2ss0o/image/upload/v1622146435/mind_eoswd2.jpg",
         video = "Baa-x29rT30"
     )
     models.db.session.add_all([coaster11, coaster10, coaster9, coaster8, coaster7, coaster6, coaster5, coaster4, coaster3, coaster2, coaster1])
