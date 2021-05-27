@@ -116,7 +116,7 @@ def seeding():
         height_in_feet = 101,
         number_of_inversions = 2,
         manufacturer = "Bolliger & Mabillard",
-        image = "https://res.cloudinary.com/drrh2ss0o/image/upload/v1622144793/goliath_ubmrrr.jpg",
+        image = "https://res.cloudinary.com/drrh2ss0o/image/upload/v1622146202/scor_txg8b9.jpg",
         video = "1Bwu0C2Qbxg"
     )
     coaster6 = models.Roller_Coaster(
@@ -130,7 +130,7 @@ def seeding():
         height_in_feet = 200,
         number_of_inversions = 0,
         manufacturer = "Bolliger & Mabillard",
-        image = "http://www.negative-g.com/six-flags-over-georgia/2011/SFOG-5-29-2011-Goliath-5.jpg",
+        image = "https://res.cloudinary.com/drrh2ss0o/image/upload/v1622144793/goliath_ubmrrr.jpg",
         video = "A_K-IjnkMIg"
     )
     coaster7 = models.Roller_Coaster(
