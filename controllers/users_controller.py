@@ -116,6 +116,8 @@ def add_to_bucketlist(id):
         return {"bucket_list" : [c.to_json() for c in coasters]}
 
 def search_by_name():
+    if not request.json:
+        return{"message": "Please Enter a Name"}, 400
     query = request.json["query"]
     user = models.User.query.filter(models.User.name.ilike(f'%{query}%')).all()
     if not user:
@@ -123,6 +125,8 @@ def search_by_name():
     return {"results": [u.to_json() for u in user]}
 
 def search_by_location():
+    if not request.json:
+        return{"message": "Please Enter a Location"}, 400
     query = request.json["query"]
     user = models.User.query.filter(models.User.location.ilike(f'%{query}%')).all()
     if not user:

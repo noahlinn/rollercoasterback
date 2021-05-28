@@ -32,7 +32,7 @@ def create_coaster():
 
 def search_coasters_by_name():
     if not request.json:
-        return{"message": "Please Enter Search Query"}, 400
+        return{"message": "Please Enter a Name"}, 400
     query = request.json["query"]
     coaster = models.Roller_Coaster.query.filter(models.Roller_Coaster.name.ilike(f'%{query}%')).all()
     if not coaster:
@@ -41,7 +41,7 @@ def search_coasters_by_name():
 
 def search_coasters_by_park():
     if not request.json:
-        return{"message": "Please Enter Search Query"}, 400
+        return{"message": "Please Enter a Park"}, 400
     query = request.json["query"]
     coaster = models.Roller_Coaster.query.filter(models.Roller_Coaster.park_located_at.ilike(f'%{query}%')).all()
     if not coaster:
